@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Lotto</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            background-color: #0088cc;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005f99;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать в Telegram Лото!</h1>
+    <p id="user-info"></p>
+    <button id="start-game">🎮 Начать игру</button>
+    <button id="show-rules">ℹ Правила</button>
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+
+        // Отображение информации о пользователе
+        document.getElementById('user-info').innerText = 
+            `Привет, ${tg.initDataUnsafe.user.first_name || 'игрок'}!`;
+
+        // Обработчики кнопок
+        document.getElementById('start-game').onclick = () => {
+            alert("Игра начинается! Выберите ваш билет.");
+            // Логика игры будет здесь
+        };
+
+        document.getElementById('show-rules').onclick = () => {
+            alert("ℹ Правила игры:\n1. Выберите билет.\n2. Ожидайте совпадений чисел.\n3. Побеждайте!");
+        };
+
+        // Закрыть Web App
+        tg.MainButton.text = "Закрыть";
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => tg.close());
+    </script>
+</body>
+</html>
+
