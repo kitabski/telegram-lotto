@@ -11,25 +11,28 @@ const ticketContainer = document.getElementById("ticket");
 const startGameButton = document.getElementById("start-game");
 const generatedNumbersContainer = document.getElementById("generated-numbers");
 
-// Загрузка билета из файла
+// Загрузка билетов из файла
 async function loadTicket(ticketNumber) {
     try {
         const response = await fetch("tickets.txt");
         const data = await response.text();
-        const tickets = data.trim().split("\n\n");
+        const tickets = data.trim().split("\n\n").map(ticket =>
+            ticket.split("\n").map(row =>
+                row.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
+            )
+        );
         if (ticketNumber > tickets.length || ticketNumber < 1) {
-            alert("Некорректный номер билета!");
+            alert(`Некорректный номер билета! Укажите число от 1 до ${tickets.length}.`);
             return;
         }
-        ticket = tickets[ticketNumber - 1].split("\n").map(row =>
-            row.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
-        );
+        ticket = tickets[ticketNumber - 1];
         renderTicket();
         startGameButton.disabled = false;
     } catch (error) {
         alert("Ошибка загрузки билета!");
     }
 }
+
 
 // Отображение билета
 function renderTicket() {
@@ -55,6 +58,7 @@ function generateNumber() {
     } while (generatedNumbers.includes(number));
     generatedNumbers.push(number);
     renderGeneratedNumbers();
+    markNumber(number);
 }
 
 // Отображение сгенерированных чисел
@@ -67,6 +71,25 @@ function renderGeneratedNumbers() {
         generatedNumbersContainer.appendChild(div);
     });
 }
+
+// Пометка совпадений на билете
+function markNumber(number) {
+    const cells = document.querySelectorAll(".ticket .cell");
+    ticket.flat().forEach((cell, index) => {
+        if (cell === number) {
+            cells[index].classList.add("marked");
+        }
+    });
+}
+
+
+    // Проверка выигрыша
+    if (ticket.flat().filter(n => n !== null).every(n => generatedNumbers.includes(n))) {
+        alert("🏆 Вы выиграли!");
+        clearInterval(intervalId);
+    }
+}
+
 
 // События
 loadTicketButton.addEventListener("click", () => {
