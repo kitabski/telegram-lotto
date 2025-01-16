@@ -4,44 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Русское Лото</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="app.js" defer></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             text-align: center;
             background-color: #f7f7f7;
         }
-        h1 {
-            margin-top: 20px;
-            font-size: 24px;
-        }
-        .grid {
+        .ticket, .numbers {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
             margin: 20px auto;
-            max-width: 300px;
+            max-width: 400px;
         }
         .cell {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
             border: 1px solid #ddd;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
         }
         .cell.marked {
             background-color: #4caf50;
             color: #fff;
-        }
-        .number-draw {
-            margin: 20px 0;
-            font-size: 18px;
         }
         button {
             padding: 10px 20px;
@@ -59,92 +51,20 @@
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в Русское Лото!</h1>
-    <p id="user-info"></p>
-    <div class="grid" id="ticket"></div>
-    <div class="number-draw" id="drawn-number"></div>
-    <button id="start-game">🎮 Начать игру</button>
-    <button id="draw-number" style="display:none;">🎲 Вытянуть число</button>
-    <script>
-        const tg = window.Telegram.WebApp;
-        const ticketGrid = document.getElementById("ticket");
-        const drawnNumber = document.getElementById("drawn-number");
-        const startButton = document.getElementById("start-game");
-        const drawButton = document.getElementById("draw-number");
-
-        let ticketNumbers = [];
-        let drawnNumbers = [];
-
-        // Отображение имени пользователя Telegram
-        document.getElementById('user-info').innerText = 
-            `Привет, ${tg.initDataUnsafe.user.first_name || 'Игрок'}!`;
-
-        // Генерация случайного билета
-        function generateTicket() {
-            const numbers = Array.from({ length: 90 }, (_, i) => i + 1);
-            ticketNumbers = [];
-            while (ticketNumbers.length < 15) {
-                const index = Math.floor(Math.random() * numbers.length);
-                ticketNumbers.push(numbers.splice(index, 1)[0]);
-            }
-            ticketNumbers.sort((a, b) => a - b);
-            renderTicket();
-        }
-
-        // Отображение билета
-        function renderTicket() {
-            ticketGrid.innerHTML = "";
-            ticketNumbers.forEach((number, index) => {
-                const cell = document.createElement("div");
-                cell.className = "cell";
-                cell.innerText = number;
-                ticketGrid.appendChild(cell);
-            });
-        }
-
-        // Вытягивание числа
-        function drawNumber() {
-            const numbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(n => !drawnNumbers.includes(n));
-            if (numbers.length === 0) {
-                drawnNumber.innerText = "Все числа вытянуты!";
-                drawButton.style.display = "none";
-                return;
-            }
-            const index = Math.floor(Math.random() * numbers.length);
-            const number = numbers[index];
-            drawnNumbers.push(number);
-            drawnNumber.innerText = `Выпало число: ${number}`;
-            markNumber(number);
-        }
-
-        // Пометка совпадений
-        function markNumber(number) {
-            const cells = document.querySelectorAll(".cell");
-            cells.forEach(cell => {
-                if (parseInt(cell.innerText) === number) {
-                    cell.classList.add("marked");
-                }
-            });
-            if (ticketNumbers.every(n => drawnNumbers.includes(n))) {
-                drawnNumber.innerText = "🏆 Вы выиграли!";
-                drawButton.style.display = "none";
-            }
-        }
-
-        // События кнопок
-        startButton.onclick = () => {
-            generateTicket();
-            drawnNumbers = [];
-            drawnNumber.innerText = "";
-            startButton.style.display = "none";
-            drawButton.style.display = "inline-block";
-        };
-        drawButton.onclick = drawNumber;
-
-        // Инициализация Web App
-        tg.MainButton.text = "Закрыть";
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => tg.close());
-    </script>
+    <h1>Русское Лото</h1>
+    <div>
+        <label for="ticket-number">Введите номер билета:</label>
+        <input type="number" id="ticket-number" min="1" />
+        <button id="load-ticket">Загрузить билет</button>
+    </div>
+    <div id="ticket-container">
+        <h2>Ваш билет:</h2>
+        <div class="ticket" id="ticket"></div>
+    </div>
+    <button id="start-game" disabled>🎮 Начать игру</button>
+    <div>
+        <h2>Сгенерированные числа:</h2>
+        <div class="numbers" id="generated-numbers"></div>
+    </div>
 </body>
 </html>
