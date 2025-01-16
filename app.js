@@ -16,23 +16,28 @@ async function loadTicket(ticketNumber) {
     try {
         const response = await fetch("tickets.txt");
         const data = await response.text();
+
+        // Разделяем билеты по пустым строкам
         const tickets = data.trim().split("\n\n").map(ticket =>
             ticket.split("\n").map(row =>
                 row.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
             )
         );
-        if (ticketNumber > tickets.length || ticketNumber < 1) {
+
+        // Проверяем корректность номера билета
+        if (ticketNumber < 1 || ticketNumber > tickets.length) {
             alert(`Некорректный номер билета! Укажите число от 1 до ${tickets.length}.`);
             return;
         }
+
+        // Загружаем выбранный билет
         ticket = tickets[ticketNumber - 1];
         renderTicket();
-        startGameButton.disabled = false;
+        startGameButton.disabled = false; // Разрешаем начать игру
     } catch (error) {
         alert("Ошибка загрузки билета!");
     }
 }
-
 
 // Отображение билета
 function renderTicket() {
@@ -40,7 +45,7 @@ function renderTicket() {
     ticket.flat().forEach(cell => {
         const div = document.createElement("div");
         div.className = "cell";
-        div.innerText = cell || "";
+        div.innerText = cell || ""; // Пустые ячейки остаются пустыми
         ticketContainer.appendChild(div);
     });
 }
@@ -52,6 +57,7 @@ function generateNumber() {
         clearInterval(intervalId);
         return;
     }
+
     let number;
     do {
         number = Math.floor(Math.random() * 90) + 1;
@@ -61,7 +67,7 @@ function generateNumber() {
     markNumber(number);
 }
 
-// Отображение сгенерированных чисел
+// Отображение всех сгенерированных чисел
 function renderGeneratedNumbers() {
     generatedNumbersContainer.innerHTML = "";
     generatedNumbers.forEach(num => {
@@ -80,8 +86,6 @@ function markNumber(number) {
             cells[index].classList.add("marked");
         }
     });
-}
-
 
     // Проверка выигрыша
     if (ticket.flat().filter(n => n !== null).every(n => generatedNumbers.includes(n))) {
@@ -89,7 +93,6 @@ function markNumber(number) {
         clearInterval(intervalId);
     }
 }
-
 
 // События
 loadTicketButton.addEventListener("click", () => {
@@ -102,4 +105,3 @@ startGameButton.addEventListener("click", () => {
     renderGeneratedNumbers();
     intervalId = setInterval(generateNumber, generationInterval);
 });
-
