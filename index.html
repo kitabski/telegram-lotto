@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Lotto</title>
+    <title>Русское Лото</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -11,18 +11,45 @@
             margin: 0;
             padding: 0;
             text-align: center;
+            background-color: #f7f7f7;
         }
         h1 {
             margin-top: 20px;
             font-size: 24px;
         }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .cell.marked {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .number-draw {
+            margin: 20px 0;
+            font-size: 18px;
+        }
         button {
             padding: 10px 20px;
             font-size: 16px;
             margin: 10px;
-            border: none;
             background-color: #0088cc;
             color: white;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -32,33 +59,92 @@
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в Telegram Лото!</h1>
+    <h1>Добро пожаловать в Русское Лото!</h1>
     <p id="user-info"></p>
+    <div class="grid" id="ticket"></div>
+    <div class="number-draw" id="drawn-number"></div>
     <button id="start-game">🎮 Начать игру</button>
-    <button id="show-rules">ℹ Правила</button>
+    <button id="draw-number" style="display:none;">🎲 Вытянуть число</button>
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
+        const ticketGrid = document.getElementById("ticket");
+        const drawnNumber = document.getElementById("drawn-number");
+        const startButton = document.getElementById("start-game");
+        const drawButton = document.getElementById("draw-number");
 
-        // Отображение информации о пользователе
+        let ticketNumbers = [];
+        let drawnNumbers = [];
+
+        // Отображение имени пользователя Telegram
         document.getElementById('user-info').innerText = 
-            `Привет, ${tg.initDataUnsafe.user.first_name || 'игрок'}!`;
+            `Привет, ${tg.initDataUnsafe.user.first_name || 'Игрок'}!`;
 
-        // Обработчики кнопок
-        document.getElementById('start-game').onclick = () => {
-            alert("Игра начинается! Выберите ваш билет.");
-            // Логика игры будет здесь
+        // Генерация случайного билета
+        function generateTicket() {
+            const numbers = Array.from({ length: 90 }, (_, i) => i + 1);
+            ticketNumbers = [];
+            while (ticketNumbers.length < 15) {
+                const index = Math.floor(Math.random() * numbers.length);
+                ticketNumbers.push(numbers.splice(index, 1)[0]);
+            }
+            ticketNumbers.sort((a, b) => a - b);
+            renderTicket();
+        }
+
+        // Отображение билета
+        function renderTicket() {
+            ticketGrid.innerHTML = "";
+            ticketNumbers.forEach((number, index) => {
+                const cell = document.createElement("div");
+                cell.className = "cell";
+                cell.innerText = number;
+                ticketGrid.appendChild(cell);
+            });
+        }
+
+        // Вытягивание числа
+        function drawNumber() {
+            const numbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(n => !drawnNumbers.includes(n));
+            if (numbers.length === 0) {
+                drawnNumber.innerText = "Все числа вытянуты!";
+                drawButton.style.display = "none";
+                return;
+            }
+            const index = Math.floor(Math.random() * numbers.length);
+            const number = numbers[index];
+            drawnNumbers.push(number);
+            drawnNumber.innerText = `Выпало число: ${number}`;
+            markNumber(number);
+        }
+
+        // Пометка совпадений
+        function markNumber(number) {
+            const cells = document.querySelectorAll(".cell");
+            cells.forEach(cell => {
+                if (parseInt(cell.innerText) === number) {
+                    cell.classList.add("marked");
+                }
+            });
+            if (ticketNumbers.every(n => drawnNumbers.includes(n))) {
+                drawnNumber.innerText = "🏆 Вы выиграли!";
+                drawButton.style.display = "none";
+            }
+        }
+
+        // События кнопок
+        startButton.onclick = () => {
+            generateTicket();
+            drawnNumbers = [];
+            drawnNumber.innerText = "";
+            startButton.style.display = "none";
+            drawButton.style.display = "inline-block";
         };
+        drawButton.onclick = drawNumber;
 
-        document.getElementById('show-rules').onclick = () => {
-            alert("ℹ Правила игры:\n1. Выберите билет.\n2. Ожидайте совпадений чисел.\n3. Побеждайте!");
-        };
-
-        // Закрыть Web App
+        // Инициализация Web App
         tg.MainButton.text = "Закрыть";
         tg.MainButton.show();
         tg.MainButton.onClick(() => tg.close());
     </script>
 </body>
 </html>
-
