@@ -17,8 +17,10 @@ async function loadTicket(ticketNumber) {
         const response = await fetch("tickets.txt");
         const data = await response.text();
 
-        // Разделяем билеты по заголовкам "Ticket <номер>"
-        const tickets = data.trim().split(/Ticket \d+/).filter(ticket => ticket.trim() !== "");
+        // Разделяем билеты по строкам
+        const tickets = data.trim().split("\n").map(line =>
+            line.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
+        );
 
         // Проверяем корректность номера билета
         if (ticketNumber < 1 || ticketNumber > tickets.length) {
@@ -26,10 +28,12 @@ async function loadTicket(ticketNumber) {
             return;
         }
 
-        // Загружаем выбранный билет
-        ticket = tickets[ticketNumber - 1].trim().split("\n").map(row =>
-            row.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
-        );
+        // Преобразуем выбранный билет в 9x3 матрицу
+        const selectedTicket = tickets[ticketNumber - 1];
+        ticket = [];
+        for (let i = 0; i < 3; i++) {
+            ticket.push(selectedTicket.slice(i * 9, (i + 1) * 9));
+        }
 
         renderTicket();
         startGameButton.disabled = false; // Разрешаем начать игру
@@ -38,6 +42,16 @@ async function loadTicket(ticketNumber) {
     }
 }
 
+// Отображение билета
+function renderTicket() {
+    ticketContainer.innerHTML = "";
+    ticket.flat().forEach(cell => {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.innerText = cell || ""; // Пустые ячейки остаются пустыми
+        ticketContainer.appendChild(div);
+    });
+}
 
 // Генерация числа
 function generateNumber() {
