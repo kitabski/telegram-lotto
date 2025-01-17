@@ -13,6 +13,7 @@
             padding: 0;
             text-align: center;
             background-color: #f7f7f7;
+            overflow: hidden; /* Убираем прокрутку */
         }
 
         /* Контейнер */
@@ -43,9 +44,9 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
+            gap: 3px; /* Меньший отступ */
             margin: 20px auto;
-            width: 90%;
+            width: 70%; /* Уменьшаем ширину */
         }
 
         .cell {
@@ -57,7 +58,7 @@
             background-color: #fff;
             border: 2px solid #ddd;
             border-radius: 50%;
-            font-size: 14px;
+            font-size: 12px; /* Уменьшенный текст */
             font-weight: bold;
             transition: background-color 0.3s, color 0.3s;
         }
