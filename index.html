@@ -15,7 +15,7 @@
             background-color: #f7f7f7;
         }
 
-        /* Контейнер для всего содержимого */
+        /* Контейнер */
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -27,30 +27,16 @@
             margin: 10px 0;
         }
 
-        /* Прокрутка чисел */
-        .scrolling-numbers {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 60px;
+        /* Анимация числа */
+        .animated-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ff4500;
             margin: 10px 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 5px;
-        }
-
-        .scrolling-numbers span {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            margin: 0 5px;
-            font-size: 16px;
-            background-color: #e0e0e0;
-            border-radius: 50%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Таблица 10x10 */
@@ -64,14 +50,16 @@
 
         .cell {
             width: 100%;
-            aspect-ratio: 1; /* Квадратные ячейки */
+            aspect-ratio: 1; /* Круг */
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
+            border-radius: 50%;
             font-size: 14px;
             font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .cell.red {
@@ -86,6 +74,10 @@
             gap: 5px;
             margin: 20px auto;
             width: 90%;
+            padding: 10px;
+            border: 2px solid orange; /* Оранжевая рамка */
+            border-radius: 10px;
+            background-color: #fff8e1; /* Светлый оранжевый фон */
         }
 
         .ticket .cell {
@@ -131,7 +123,7 @@
             <button id="load-ticket">Загрузить билет</button>
         </div>
         <h2 id="ticket-title">Ваш Билет</h2>
-        <div class="scrolling-numbers" id="scrolling-numbers"></div>
+        <div class="animated-number" id="animated-number">-</div>
         <div class="grid" id="number-grid"></div>
         <div class="ticket" id="ticket"></div>
         <button id="start-game" disabled>🎮 Начать игру</button>
