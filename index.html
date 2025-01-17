@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Русское Лото (0.1)</title>
+    <title>Русское Лото</title>
     <script src="app.js" defer></script>
     <style>
         body {
@@ -13,12 +13,12 @@
             text-align: center;
             background-color: #f7f7f7;
         }
-        .ticket, .numbers {
+        .ticket, .numbers, .grid {
             display: grid;
-            grid-template-columns: repeat(9, 1fr);
+            grid-template-columns: repeat(10, 1fr);
             gap: 5px;
             margin: 20px auto;
-            max-width: 400px;
+            max-width: 500px;
         }
         .cell {
             width: 40px;
@@ -33,6 +33,10 @@
         }
         .cell.marked {
             background-color: #4caf50;
+            color: #fff;
+        }
+        .cell.red {
+            background-color: #ff0000;
             color: #fff;
         }
         button {
@@ -57,8 +61,9 @@
         <input type="number" id="ticket-number" min="1" />
         <button id="load-ticket">Загрузить билет</button>
     </div>
+    <h2 id="ticket-title">Ваш Билет</h2>
+    <div class="grid" id="number-grid"></div>
     <div id="ticket-container">
-        <h2>Ваш билет:</h2>
         <div class="ticket" id="ticket"></div>
     </div>
     <button id="start-game" disabled>🎮 Начать игру</button>
