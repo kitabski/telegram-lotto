@@ -2,27 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Русское Лото</title>
     <script src="app.js" defer></script>
     <style>
+        /* Общие стили */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             text-align: center;
             background-color: #f7f7f7;
         }
-        .ticket, .numbers, .grid {
+
+        /* Контейнер для всего содержимого */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        /* Заголовки */
+        h1, h2 {
+            margin: 10px 0;
+        }
+
+        /* Прокрутка чисел */
+        .scrolling-numbers {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 5px;
+        }
+
+        .scrolling-numbers span {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+        }
+
+        /* Таблица 10x10 */
+        .grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 5px;
             margin: 20px auto;
-            max-width: 500px;
+            width: 90%;
         }
+
         .cell {
-            width: 40px;
-            height: 40px;
+            width: 100%;
+            aspect-ratio: 1; /* Квадратные ячейки */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -31,14 +73,39 @@
             font-size: 14px;
             font-weight: bold;
         }
-        .cell.marked {
-            background-color: #4caf50;
-            color: #fff;
-        }
+
         .cell.red {
             background-color: #ff0000;
             color: #fff;
         }
+
+        /* Билет */
+        .ticket {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
+            margin: 20px auto;
+            width: 90%;
+        }
+
+        .ticket .cell {
+            width: 100%;
+            aspect-ratio: 1; /* Квадратные ячейки */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .cell.marked {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        /* Кнопки */
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -49,27 +116,25 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #005f99;
         }
     </style>
 </head>
 <body>
-    <h1>Русское Лото</h1>
-    <div>
-        <label for="ticket-number">Введите номер билета:</label>
-        <input type="number" id="ticket-number" min="1" />
-        <button id="load-ticket">Загрузить билет</button>
-    </div>
-    <h2 id="ticket-title">Ваш Билет</h2>
-    <div class="grid" id="number-grid"></div>
-    <div id="ticket-container">
+    <div class="container">
+        <h1>Русское Лото</h1>
+        <div>
+            <label for="ticket-number">Введите номер билета:</label>
+            <input type="number" id="ticket-number" min="1" />
+            <button id="load-ticket">Загрузить билет</button>
+        </div>
+        <h2 id="ticket-title">Ваш Билет</h2>
+        <div class="scrolling-numbers" id="scrolling-numbers"></div>
+        <div class="grid" id="number-grid"></div>
         <div class="ticket" id="ticket"></div>
-    </div>
-    <button id="start-game" disabled>🎮 Начать игру</button>
-    <div>
-        <h2>Сгенерированные числа:</h2>
-        <div class="numbers" id="generated-numbers"></div>
+        <button id="start-game" disabled>🎮 Начать игру</button>
     </div>
 </body>
 </html>
