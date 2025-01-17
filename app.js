@@ -10,6 +10,20 @@ const loadTicketButton = document.getElementById("load-ticket");
 const ticketContainer = document.getElementById("ticket");
 const startGameButton = document.getElementById("start-game");
 const generatedNumbersContainer = document.getElementById("generated-numbers");
+const numberGrid = document.getElementById("number-grid");
+const ticketTitle = document.getElementById("ticket-title");
+
+// Создание таблицы 10x10
+function createNumberGrid() {
+    numberGrid.innerHTML = "";
+    for (let i = 1; i <= 90; i++) {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.innerText = i;
+        div.id = `number-${i}`;
+        numberGrid.appendChild(div);
+    }
+}
 
 // Загрузка билетов из файла
 async function loadTicket(ticketNumber) {
@@ -36,7 +50,9 @@ async function loadTicket(ticketNumber) {
         }
 
         renderTicket();
+        ticketTitle.innerText = `Ваш Билет (№${ticketNumber})`; // Обновляем заголовок
         startGameButton.disabled = false; // Разрешаем начать игру
+        createNumberGrid(); // Создаём таблицу 10x10
     } catch (error) {
         alert("Ошибка загрузки билета!");
     }
@@ -81,7 +97,7 @@ function renderGeneratedNumbers() {
     });
 }
 
-// Пометка совпадений на билете
+// Пометка совпадений на билете и в таблице
 function markNumber(number) {
     const cells = document.querySelectorAll(".ticket .cell");
     ticket.flat().forEach((cell, index) => {
@@ -89,6 +105,12 @@ function markNumber(number) {
             cells[index].classList.add("marked");
         }
     });
+
+    // Окрашивание числа в таблице 10x10
+    const gridCell = document.getElementById(`number-${number}`);
+    if (gridCell) {
+        gridCell.classList.add("red");
+    }
 
     // Проверка выигрыша
     if (ticket.flat().filter(n => n !== null).every(n => generatedNumbers.includes(n))) {
