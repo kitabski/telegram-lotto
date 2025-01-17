@@ -4,6 +4,7 @@ let generatedNumbers = [];
 let intervalId = null;
 const generationInterval = 1000; // Интервал генерации чисел (мс)
 const animationDuration = 3000; // Длительность анимации (мс)
+const delayAfterNumber = 1000; // Задержка после выпавшего числа (мс)
 
 // Элементы DOM
 const ticketNumberInput = document.getElementById("ticket-number");
@@ -71,7 +72,7 @@ function renderTicket() {
 }
 
 // Генерация числа с анимацией
-function generateNumber() {
+async function generateNumber() {
     if (generatedNumbers.length >= 90) {
         alert("Все числа сгенерированы!");
         clearInterval(intervalId);
@@ -87,20 +88,22 @@ function generateNumber() {
         animatedNumber.innerText = random;
     }, 100);
 
-    setTimeout(() => {
-        clearInterval(randomAnimationInterval);
+    await new Promise(resolve => setTimeout(resolve, animationDuration)); // Ждём завершения анимации
 
-        // Выбор финального числа
-        do {
-            number = Math.floor(Math.random() * 90) + 1;
-        } while (generatedNumbers.includes(number));
+    clearInterval(randomAnimationInterval);
 
-        generatedNumbers.push(number);
-        animatedNumber.innerText = number;
+    // Выбор финального числа
+    do {
+        number = Math.floor(Math.random() * 90) + 1;
+    } while (generatedNumbers.includes(number));
 
-        // Обновление таблицы и билета
-        markNumber(number);
-    }, animationDuration);
+    generatedNumbers.push(number);
+    animatedNumber.innerText = number;
+
+    // Обновление таблицы и билета
+    markNumber(number);
+
+    await new Promise(resolve => setTimeout(resolve, delayAfterNumber)); // Задержка перед следующим числом
 }
 
 // Пометка совпадений на билете и в таблице
@@ -135,5 +138,5 @@ startGameButton.addEventListener("click", () => {
     generatedNumbers = [];
     createNumberGrid();
     animatedNumber.innerText = "-";
-    intervalId = setInterval(generateNumber, generationInterval + animationDuration);
+    intervalId = setInterval(generateNumber, generationInterval + animationDuration + delayAfterNumber);
 });
