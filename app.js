@@ -3,13 +3,14 @@ let ticket = [];
 let generatedNumbers = [];
 let intervalId = null;
 const generationInterval = 1000; // Интервал генерации чисел (мс)
+const animationDuration = 3000; // Длительность анимации (мс)
 
 // Элементы DOM
 const ticketNumberInput = document.getElementById("ticket-number");
 const loadTicketButton = document.getElementById("load-ticket");
 const ticketContainer = document.getElementById("ticket");
 const startGameButton = document.getElementById("start-game");
-const scrollingNumbersContainer = document.getElementById("scrolling-numbers");
+const animatedNumber = document.getElementById("animated-number");
 const numberGrid = document.getElementById("number-grid");
 const ticketTitle = document.getElementById("ticket-title");
 
@@ -69,7 +70,7 @@ function renderTicket() {
     });
 }
 
-// Генерация числа
+// Генерация числа с анимацией
 function generateNumber() {
     if (generatedNumbers.length >= 90) {
         alert("Все числа сгенерированы!");
@@ -77,20 +78,29 @@ function generateNumber() {
         return;
     }
 
+    let randomAnimationInterval;
     let number;
-    do {
-        number = Math.floor(Math.random() * 90) + 1;
-    } while (generatedNumbers.includes(number));
-    generatedNumbers.push(number);
-    updateScrollingNumbers(number);
-    markNumber(number);
-}
 
-// Обновление прокручивающихся чисел
-function updateScrollingNumbers(number) {
-    const span = document.createElement("span");
-    span.innerText = number;
-    scrollingNumbersContainer.appendChild(span);
+    // Анимация чисел
+    randomAnimationInterval = setInterval(() => {
+        const random = Math.floor(Math.random() * 90) + 1;
+        animatedNumber.innerText = random;
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(randomAnimationInterval);
+
+        // Выбор финального числа
+        do {
+            number = Math.floor(Math.random() * 90) + 1;
+        } while (generatedNumbers.includes(number));
+
+        generatedNumbers.push(number);
+        animatedNumber.innerText = number;
+
+        // Обновление таблицы и билета
+        markNumber(number);
+    }, animationDuration);
 }
 
 // Пометка совпадений на билете и в таблице
@@ -123,6 +133,7 @@ loadTicketButton.addEventListener("click", () => {
 
 startGameButton.addEventListener("click", () => {
     generatedNumbers = [];
-    scrollingNumbersContainer.innerHTML = ""; // Очищаем прокручивающийся список
-    intervalId = setInterval(generateNumber, generationInterval);
+    createNumberGrid();
+    animatedNumber.innerText = "-";
+    intervalId = setInterval(generateNumber, generationInterval + animationDuration);
 });
