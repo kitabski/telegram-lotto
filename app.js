@@ -9,7 +9,7 @@ const ticketNumberInput = document.getElementById("ticket-number");
 const loadTicketButton = document.getElementById("load-ticket");
 const ticketContainer = document.getElementById("ticket");
 const startGameButton = document.getElementById("start-game");
-const generatedNumbersContainer = document.getElementById("generated-numbers");
+const scrollingNumbersContainer = document.getElementById("scrolling-numbers");
 const numberGrid = document.getElementById("number-grid");
 const ticketTitle = document.getElementById("ticket-title");
 
@@ -82,19 +82,15 @@ function generateNumber() {
         number = Math.floor(Math.random() * 90) + 1;
     } while (generatedNumbers.includes(number));
     generatedNumbers.push(number);
-    renderGeneratedNumbers();
+    updateScrollingNumbers(number);
     markNumber(number);
 }
 
-// Отображение всех сгенерированных чисел
-function renderGeneratedNumbers() {
-    generatedNumbersContainer.innerHTML = "";
-    generatedNumbers.forEach(num => {
-        const div = document.createElement("div");
-        div.className = "cell";
-        div.innerText = num;
-        generatedNumbersContainer.appendChild(div);
-    });
+// Обновление прокручивающихся чисел
+function updateScrollingNumbers(number) {
+    const span = document.createElement("span");
+    span.innerText = number;
+    scrollingNumbersContainer.appendChild(span);
 }
 
 // Пометка совпадений на билете и в таблице
@@ -127,6 +123,6 @@ loadTicketButton.addEventListener("click", () => {
 
 startGameButton.addEventListener("click", () => {
     generatedNumbers = [];
-    renderGeneratedNumbers();
+    scrollingNumbersContainer.innerHTML = ""; // Очищаем прокручивающийся список
     intervalId = setInterval(generateNumber, generationInterval);
 });
