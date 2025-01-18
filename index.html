@@ -48,24 +48,26 @@
             justify-content: center;
         }
 
+        /* Сетка с номерами */
         .grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 2px;
+            grid-template-columns: repeat(10, 1fr); /* 10 столбцов */
+            gap: 2px; /* Отступы между кружочками */
             margin: 10px auto;
-            width: 80%;
+            width: 70%; /* Меньше ширина */
         }
 
+        /* Кружочки с числами */
         .cell {
-            width: 100%;
-            aspect-ratio: 1;
+            width: 20px; /* Сделал меньше размер кружочка */
+            height: 20px; /* Сделал меньше размер кружочка */
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 50%;
-            font-size: 12px;
+            border-radius: 50%; /* Закругление – кружочек */
+            font-size: 10px; /* Уменьшил шрифт внутри кружочков */
             font-weight: bold;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -75,27 +77,29 @@
             color: #fff;
         }
 
+        /* Билет с числами */
         .ticket {
             display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 3px;
+            grid-template-columns: repeat(9, 1fr); /* 9 столбцов */
+            gap: 3px; /* Расстояние между ячейками */
             margin: 15px auto;
-            width: 85%;
+            width: 80%; /* Немного меньше ширина */
             padding: 10px;
             border: 1px solid orange;
             border-radius: 5px;
             background-color: #fff8e1;
         }
 
+        /* Квадратики для чисел */
         .ticket .cell {
-            width: 100%;
-            aspect-ratio: 1;
+            width: 30px; /* Уменьшил ширину квадратиков */
+            height: 30px; /* Сделал квадраты */
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
             border: 1px solid #ddd;
-            font-size: 12px;
+            font-size: 12px; /* Уменьшил размер шрифта внутри */
             font-weight: bold;
         }
 
@@ -104,6 +108,7 @@
             color: #fff;
         }
 
+        /* Кнопка "Начать игру" */
         button {
             padding: 8px 15px;
             font-size: 14px;
@@ -111,8 +116,17 @@
             background-color: #0088cc;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 3px; /* По умолчанию – с небольшим закруглением */
             cursor: pointer;
+        }
+
+        /* Сделал кнопку круглой и больше */
+        #start-game {
+            padding: 15px; /* Увеличил отступы */
+            font-size: 16px; /* Увеличил шрифт */
+            border-radius: 50%; /* Полностью закругленная кнопка */
+            width: 100px; /* Сделал шире */
+            height: 100px; /* Сделал выше */
         }
 
         button:hover {
@@ -146,6 +160,12 @@
                 font-size: 12px;
                 padding: 5px 10px;
             }
+
+            #start-game {
+                width: 80px; /* Меньше размер кнопки на мобильных */
+                height: 80px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -161,7 +181,7 @@
         <div class="animated-number" id="animated-number">-</div>
         <div class="grid" id="number-grid"></div>
         <div class="ticket" id="ticket"></div>
-        <button id="start-game" disabled>🎮 Начать игру</button>
+        <button id="start-game" disabled>🎮</button>
     </div>
 </body>
 </html>
