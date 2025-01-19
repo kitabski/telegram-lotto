@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Русское Лото</title>
+    <title>LotoKit</title>
     <script src="app.js" defer></script>
     <style>
         /* Общие стили */
@@ -13,7 +12,8 @@
             margin: 0;
             padding: 0;
             text-align: center;
-            background-color: #f7f7f7;
+            background: linear-gradient(to bottom, #003366, #006699, #3399ff); /* Морская тема */
+            color: white;
         }
 
         .container {
@@ -23,25 +23,15 @@
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 36px;
             margin-bottom: 10px;
-        }
-
-        label {
-            font-size: 14px;
-        }
-
-        input {
-            padding: 5px;
-            font-size: 14px;
-            width: 60px;
-            text-align: center;
+            color: #cce7ff; /* Светло-голубой */
         }
 
         .animated-number {
             font-size: 28px;
             font-weight: bold;
-            color: #ff4500;
+            color: #ffccff; /* Фиолетовый */
             margin: 10px 0;
             height: 50px;
             display: flex;
@@ -52,137 +42,133 @@
         /* Сетка с номерами */
         .grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr); /* 10 столбцов */
-            gap: 2px; /* Отступы между кружочками */
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
             margin: 10px auto;
-            width: 70%; /* Меньше ширина */
+            width: 70%;
         }
 
-        /* Кружочки с числами */
         .cell {
-            width: 20px; /* Сделал меньше размер кружочка */
-            height: 20px; /* Сделал меньше размер кружочка */
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 50%; /* Закругление – кружочек */
-            font-size: 10px; /* Уменьшил шрифт внутри кружочков */
+            background-color: #cce7ff;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            font-size: 10px;
             font-weight: bold;
-            transition: background-color 0.3s, color 0.3s;
+            color: #003366;
         }
 
         .cell.red {
-            background-color: #ff0000;
-            color: #fff;
+            background-color: #ff6666; /* Красный */
+            color: #ffffff;
         }
 
-        /* Билет с числами */
+        /* Билет */
         .ticket {
             display: grid;
-            grid-template-columns: repeat(9, 1fr); /* 9 столбцов */
-            gap: 3px; /* Расстояние между ячейками */
+            grid-template-columns: repeat(9, 1fr);
+            gap: 3px;
             margin: 15px auto;
-            width: 80%; /* Немного меньше ширина */
+            width: 80%;
             padding: 10px;
-            border: 1px solid orange;
+            border: 2px solid #006699;
             border-radius: 5px;
-            background-color: #fff8e1;
-            position: relative; /* Для отображения номера билета */
+            background-color: #cce7ff;
+            position: relative;
         }
 
-        /* Квадратики для чисел */
         .ticket .cell {
-            width: 30px; /* Уменьшил ширину квадратиков */
-            height: 30px; /* Сделал квадраты */
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            font-size: 12px; /* Уменьшил размер шрифта внутри */
+            background-color: #ffffff;
+            border: 1px solid #006699;
+            font-size: 12px;
             font-weight: bold;
         }
 
         .cell.marked {
-            background-color: #4caf50;
-            color: #fff;
+            background-color: #66ccff; /* Голубой */
+            color: #ffffff;
         }
 
-        /* Кнопка "Начать игру" */
         button {
-            padding: 8px 15px;
-            font-size: 14px;
-            margin: 5px;
-            background-color: #0088cc;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #006699;
             color: white;
             border: none;
-            border-radius: 3px; /* По умолчанию – с небольшим закруглением */
+            border-radius: 5px;
             cursor: pointer;
         }
 
-        /* Сделал кнопку круглой и больше */
-        #start-game {
-            padding: 15px; /* Увеличил отступы */
-            font-size: 16px; /* Увеличил шрифт */
-            border-radius: 50%; /* Полностью закругленная кнопка */
-            width: 100px; /* Сделал шире */
-            height: 100px; /* Сделал выше */
-        }
-
         button:hover {
-            background-color: #005f99;
+            background-color: #003366;
         }
 
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 20px;
-            }
+        #start-game {
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
 
-            label {
-                font-size: 12px;
-            }
+        /* Всплывающее окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-            input {
-                font-size: 12px;
-                width: 50px;
-            }
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
 
-            .grid {
-                width: 90%;
-            }
-
-            .ticket {
-                width: 90%;
-            }
-
-            button {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-
-            #start-game {
-                width: 80px; /* Меньше размер кнопки на мобильных */
-                height: 80px;
-                font-size: 14px;
-            }
+        .modal-content button {
+            width: 120px;
+            margin: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Русское Лото</h1>
+        <h1>LotoKit</h1>
         <div>
-            <label for="ticket-number">Введите номер билета:</label>
-            <input type="number" id="ticket-number" min="1" />
-            <button id="load-ticket">Загрузить билет</button>
+            <button id="buy-ticket">Купить билет</button>
         </div>
         <div class="animated-number" id="animated-number">-</div>
         <div class="grid" id="number-grid"></div>
         <div class="ticket" id="ticket"></div>
         <button id="start-game" disabled>🎮</button>
+    </div>
+
+    <!-- Всплывающее окно -->
+    <div class="modal" id="ticket-modal">
+        <div class="modal-content">
+            <h3>Выберите билет</h3>
+            <button id="select-ticket">Выбрать</button>
+            <button id="random-ticket">Случайный</button>
+        </div>
     </div>
 </body>
 </html>
