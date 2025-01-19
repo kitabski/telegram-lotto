@@ -3,7 +3,7 @@ let ticket = []; // Хранит текущий билет
 let generatedNumbers = []; // Хранит список сгенерированных чисел
 let intervalId = null; // Идентификатор интервала для анимации чисел
 const generationInterval = 1000; // Интервал между генерацией чисел (мс)
-const animationDuration = 1000; // Длительность анимации чисел (мс)
+const animationDuration = 1000; // Длительность анимации (мс)
 const delayAfterNumber = 1000; // Задержка после выбора числа (мс)
 
 // Элементы DOM
@@ -46,7 +46,7 @@ async function loadTicket(ticketNumber) {
 
         // Проверяем корректность номера билета
         if (ticketNumber < 1 || ticketNumber > tickets.length) {
-            alert(`Некорректный номер билета! Укажите число от 1 до ${tickets.length}.`);
+            showModal("Ошибка", `Некорректный номер билета! Укажите число от 1 до ${tickets.length}.`);
             return;
         }
 
@@ -61,7 +61,7 @@ async function loadTicket(ticketNumber) {
         startGameButton.disabled = false; // Активируем кнопку "Начать игру"
         createNumberGrid(); // Создаем сетку чисел
     } catch (error) {
-        alert("Ошибка загрузки билета!"); // Ошибка загрузки файла
+        showModal("Ошибка", "Ошибка загрузки билета!"); // Пользовательское окно
     }
 }
 
@@ -94,10 +94,8 @@ function renderTicket(ticketNumber) {
  */
 async function generateNumber() {
     if (generatedNumbers.length >= 90) {
-        alert("Все числа сгенерированы!");
-        clearInterval(intervalId);
-        intervalId = null; // Сбрасываем интервал
-        startGameButton.disabled = false; // Разблокируем кнопку
+        showModal("Конец игры", "Все числа сгенерированы!");
+        resetGame(); // Возвращаем игру в начальное состояние
         return;
     }
 
@@ -145,11 +143,40 @@ function markNumber(number) {
     }
 
     if (ticket.flat().filter(n => n !== null).every(n => generatedNumbers.includes(n))) {
-        alert("🏆 Вы выиграли!");
-        clearInterval(intervalId);
-        intervalId = null; // Сбрасываем интервал
-        startGameButton.disabled = false; // Разблокируем кнопку
+        showModal("Вы выиграли!", "Поздравляем, вы выиграли!");
+        resetGame(); // Сбрасываем игру
     }
+}
+
+/**
+ * Показывает пользовательское модальное окно.
+ * @param {string} title - Заголовок окна.
+ * @param {string} message - Сообщение.
+ */
+function showModal(title, message) {
+    const modalContent = document.createElement("div");
+    modalContent.className = "modal-content";
+    modalContent.innerHTML = `<h3>${title}</h3><p>${message}</p><button id="close-modal">Закрыть</button>`;
+    ticketModal.innerHTML = "";
+    ticketModal.appendChild(modalContent);
+    ticketModal.style.display = "flex";
+
+    document.getElementById("close-modal").addEventListener("click", () => {
+        ticketModal.style.display = "none";
+    });
+}
+
+/**
+ * Сбрасывает игру в начальное состояние.
+ */
+function resetGame() {
+    clearInterval(intervalId);
+    intervalId = null;
+    generatedNumbers = [];
+    animatedNumber.innerText = "-";
+    startGameButton.disabled = true;
+    buyTicketButton.style.display = "inline-block";
+    startGameButton.style.display = "inline-block";
 }
 
 // События для кнопок
@@ -172,6 +199,9 @@ randomTicketButton.addEventListener("click", () => {
 });
 
 startGameButton.addEventListener("click", () => {
+    buyTicketButton.style.display = "none"; // Скрываем кнопки
+    startGameButton.style.display = "none";
+
     if (generatedNumbers.length === 0) {
         createNumberGrid(); // Очищаем сетку чисел
         animatedNumber.innerText = "-"; // Сбрасываем анимацию
@@ -180,6 +210,5 @@ startGameButton.addEventListener("click", () => {
 
     if (!intervalId) {
         intervalId = setInterval(generateNumber, generationInterval + animationDuration + delayAfterNumber); // Запускаем игру
-        startGameButton.disabled = true; // Блокируем кнопку
     }
 });
