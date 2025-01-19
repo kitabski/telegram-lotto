@@ -4,15 +4,17 @@ let generatedNumbers = []; // Хранит список сгенерирован
 let intervalId = null; // Идентификатор интервала для анимации чисел
 const generationInterval = 1000; // Интервал между генерацией чисел (мс)
 const animationDuration = 1000; // Длительность анимации чисел (мс)
-const delayAfterNumber = 1000; // Задержка после выбора финального числа (мс)
+const delayAfterNumber = 1000; // Задержка после выбора числа (мс)
 
 // Элементы DOM
-const ticketNumberInput = document.getElementById("ticket-number"); // Поле для ввода номера билета
-const loadTicketButton = document.getElementById("load-ticket"); // Кнопка для загрузки билета
-const ticketContainer = document.getElementById("ticket"); // Контейнер для отображения билета
-const startGameButton = document.getElementById("start-game"); // Кнопка для начала игры
-const animatedNumber = document.getElementById("animated-number"); // Отображение текущего выпавшего числа
-const numberGrid = document.getElementById("number-grid"); // Сетка чисел от 1 до 90
+const buyTicketButton = document.getElementById("buy-ticket"); // Кнопка "Купить билет"
+const ticketModal = document.getElementById("ticket-modal"); // Всплывающее окно
+const selectTicketButton = document.getElementById("select-ticket"); // Кнопка "Выбрать билет"
+const randomTicketButton = document.getElementById("random-ticket"); // Кнопка "Случайный билет"
+const ticketContainer = document.getElementById("ticket"); // Контейнер для билета
+const startGameButton = document.getElementById("start-game"); // Кнопка "Начать игру"
+const animatedNumber = document.getElementById("animated-number"); // Анимация текущего числа
+const numberGrid = document.getElementById("number-grid"); // Сетка чисел
 
 /**
  * Создает сетку чисел 10x10 (числа от 1 до 90).
@@ -21,9 +23,9 @@ function createNumberGrid() {
     numberGrid.innerHTML = ""; // Очищаем старую сетку
     for (let i = 1; i <= 90; i++) {
         const div = document.createElement("div");
-        div.className = "cell"; // Стандартный стиль ячейки
-        div.innerText = i; // Добавляем число
-        div.id = `number-${i}`; // Уникальный идентификатор для каждой ячейки
+        div.className = "cell"; // Стиль ячейки
+        div.innerText = i; // Число
+        div.id = `number-${i}`; // Уникальный идентификатор ячейки
         numberGrid.appendChild(div); // Добавляем ячейку в сетку
     }
 }
@@ -34,10 +36,10 @@ function createNumberGrid() {
  */
 async function loadTicket(ticketNumber) {
     try {
-        const response = await fetch("tickets.txt"); // Загружаем файл с билетами
-        const data = await response.text(); // Преобразуем файл в текст
+        const response = await fetch("tickets.txt"); // Загружаем файл
+        const data = await response.text(); // Читаем содержимое файла
 
-        // Разделяем билеты по строкам
+        // Преобразуем данные билетов
         const tickets = data.trim().split("\n").map(line =>
             line.split(",").map(cell => (cell.trim() === "_" ? null : parseInt(cell.trim())))
         );
@@ -56,10 +58,10 @@ async function loadTicket(ticketNumber) {
         }
 
         renderTicket(ticketNumber); // Отображаем билет
-        startGameButton.disabled = false; // Активируем кнопку "Старт"
+        startGameButton.disabled = false; // Активируем кнопку "Начать игру"
         createNumberGrid(); // Создаем сетку чисел
     } catch (error) {
-        alert("Ошибка загрузки билета!"); // Ошибка при загрузке
+        alert("Ошибка загрузки билета!"); // Ошибка загрузки файла
     }
 }
 
@@ -71,9 +73,9 @@ function renderTicket(ticketNumber) {
     ticketContainer.innerHTML = ""; // Очищаем старый билет
     ticket.flat().forEach(cell => {
         const div = document.createElement("div");
-        div.className = "cell"; // Стандартный стиль ячейки
-        div.innerText = cell || ""; // Если ячейка пуста, оставляем пустой текст
-        ticketContainer.appendChild(div);
+        div.className = "cell"; // Стиль ячейки
+        div.innerText = cell || ""; // Если ячейка пустая
+        ticketContainer.appendChild(div); // Добавляем ячейку в контейнер
     });
 
     // Добавляем номер билета в правом верхнем углу
@@ -103,47 +105,45 @@ async function generateNumber() {
 
     // Анимация смены чисел
     randomAnimationInterval = setInterval(() => {
-        const random = Math.floor(Math.random() * 90) + 1; // Случайное число от 1 до 90
-        animatedNumber.innerText = random; // Показываем число
-    }, 50); // Быстрая смена чисел
+        const random = Math.floor(Math.random() * 90) + 1; // Случайное число
+        animatedNumber.innerText = random; // Отображаем число
+    }, 50); // Интервал смены чисел
 
     await new Promise(resolve => setTimeout(resolve, animationDuration)); // Ждем 1 секунду
 
     clearInterval(randomAnimationInterval); // Останавливаем анимацию
 
-    // Выбираем финальное число, которого еще не было
+    // Генерируем финальное число
     let number;
     do {
         number = Math.floor(Math.random() * 90) + 1;
     } while (generatedNumbers.includes(number));
 
-    generatedNumbers.push(number); // Добавляем число в список сгенерированных
+    generatedNumbers.push(number); // Добавляем число в список
     animatedNumber.innerText = number; // Отображаем финальное число
 
-    markNumber(number); // Помечаем число на билете и в сетке
+    markNumber(number); // Отмечаем число на билете и в сетке
 
-    await new Promise(resolve => setTimeout(resolve, delayAfterNumber)); // Ждем перед следующим числом
+    await new Promise(resolve => setTimeout(resolve, delayAfterNumber)); // Задержка перед следующим числом
 }
 
 /**
  * Помечает совпавшие числа на билете и в сетке.
- * @param {number} number - Число, которое нужно отметить.
+ * @param {number} number - Число для пометки.
  */
 function markNumber(number) {
     const cells = document.querySelectorAll(".ticket .cell");
     ticket.flat().forEach((cell, index) => {
         if (cell === number) {
-            cells[index].classList.add("marked"); // Помечаем совпавшее число на билете
+            cells[index].classList.add("marked"); // Помечаем ячейку
         }
     });
 
-    // Помечаем число в сетке
     const gridCell = document.getElementById(`number-${number}`);
     if (gridCell) {
-        gridCell.classList.add("red");
+        gridCell.classList.add("red"); // Помечаем ячейку в сетке
     }
 
-    // Проверяем, все ли числа на билете совпали
     if (ticket.flat().filter(n => n !== null).every(n => generatedNumbers.includes(n))) {
         alert("🏆 Вы выиграли!");
         clearInterval(intervalId);
@@ -152,21 +152,34 @@ function markNumber(number) {
     }
 }
 
-// События
-loadTicketButton.addEventListener("click", () => {
-    const ticketNumber = parseInt(ticketNumberInput.value);
-    loadTicket(ticketNumber); // Загружаем билет по введенному номеру
+// События для кнопок
+buyTicketButton.addEventListener("click", () => {
+    ticketModal.style.display = "flex"; // Показываем всплывающее окно
+});
+
+selectTicketButton.addEventListener("click", () => {
+    const ticketNumber = parseInt(prompt("Введите номер билета:"));
+    if (!isNaN(ticketNumber)) {
+        loadTicket(ticketNumber); // Загружаем выбранный билет
+        ticketModal.style.display = "none"; // Закрываем окно
+    }
+});
+
+randomTicketButton.addEventListener("click", () => {
+    const ticketNumber = Math.floor(Math.random() * 3) + 1; // Генерируем случайный номер билета
+    loadTicket(ticketNumber);
+    ticketModal.style.display = "none"; // Закрываем окно
 });
 
 startGameButton.addEventListener("click", () => {
     if (generatedNumbers.length === 0) {
         createNumberGrid(); // Очищаем сетку чисел
         animatedNumber.innerText = "-"; // Сбрасываем анимацию
-        generatedNumbers = []; // Очищаем список сгенерированных чисел
+        generatedNumbers = []; // Очищаем список чисел
     }
 
     if (!intervalId) {
         intervalId = setInterval(generateNumber, generationInterval + animationDuration + delayAfterNumber); // Запускаем игру
-        startGameButton.disabled = true; // Блокируем кнопку, чтобы предотвратить повторное нажатие
+        startGameButton.disabled = true; // Блокируем кнопку
     }
 });
