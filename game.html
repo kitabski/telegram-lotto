@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>LotoKit Game</title>
+    <script src="app.js" defer></script>
+    <style>
+        /* Общие стили из app.js */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(to bottom, #003366, #006699, #3399ff); /* Морская тема */
+            color: white;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #cce7ff; /* Светло-голубой */
+        }
+
+        .animated-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffccff; /* Фиолетовый */
+            margin: 10px 0;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Кнопки и другие стили из app.js */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #006699;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LotoKit</h1>
+        <div>
+            <button id="buy-ticket">Купить билет</button>
+        </div>
+        <div class="animated-number" id="animated-number">-</div>
+        <div class="grid" id="number-grid"></div>
+        <div class="ticket" id="ticket"></div>
+        <button id="start-game" disabled>🎮</button>
+    </div>
+    <!-- Всплывающее окно -->
+    <div class="modal" id="ticket-modal">
+        <div class="modal-content">
+            <h3>Выберите билет</h3>
+            <button id="select-ticket">Выбрать</button>
+            <button id="random-ticket">Случайный</button>
+        </div>
+    </div>
+</body>
+</html>
