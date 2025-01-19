@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +89,7 @@
             border: 1px solid orange;
             border-radius: 5px;
             background-color: #fff8e1;
+            position: relative; /* Для отображения номера билета */
         }
 
         /* Квадратики для чисел */
@@ -177,7 +179,6 @@
             <input type="number" id="ticket-number" min="1" />
             <button id="load-ticket">Загрузить билет</button>
         </div>
-        <h2 id="ticket-title">Ваш Билет</h2>
         <div class="animated-number" id="animated-number">-</div>
         <div class="grid" id="number-grid"></div>
         <div class="ticket" id="ticket"></div>
