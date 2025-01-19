@@ -3,7 +3,7 @@ let ticket = [];
 let generatedNumbers = [];
 let intervalId = null;
 const generationInterval = 1000; // Интервал генерации чисел (мс)
-const animationDuration = 3000; // Длительность анимации (мс)
+const animationDuration = 1000; // Длительность анимации (мс)
 const delayAfterNumber = 1000; // Задержка после выпавшего числа (мс)
 
 // Элементы DOM
@@ -13,7 +13,6 @@ const ticketContainer = document.getElementById("ticket");
 const startGameButton = document.getElementById("start-game");
 const animatedNumber = document.getElementById("animated-number");
 const numberGrid = document.getElementById("number-grid");
-const ticketTitle = document.getElementById("ticket-title");
 
 // Создание таблицы 10x10
 function createNumberGrid() {
@@ -51,8 +50,7 @@ async function loadTicket(ticketNumber) {
             ticket.push(selectedTicket.slice(i * 9, (i + 1) * 9));
         }
 
-        renderTicket();
-        ticketTitle.innerText = `Ваш Билет (№${ticketNumber})`; // Обновляем заголовок
+        renderTicket(ticketNumber);
         startGameButton.disabled = false; // Разрешаем начать игру
         createNumberGrid(); // Создаём таблицу 10x10
     } catch (error) {
@@ -61,7 +59,7 @@ async function loadTicket(ticketNumber) {
 }
 
 // Отображение билета
-function renderTicket() {
+function renderTicket(ticketNumber) {
     ticketContainer.innerHTML = "";
     ticket.flat().forEach(cell => {
         const div = document.createElement("div");
@@ -69,6 +67,16 @@ function renderTicket() {
         div.innerText = cell || ""; // Пустые ячейки остаются пустыми
         ticketContainer.appendChild(div);
     });
+
+    // Добавляем номер билета
+    const ticketNumberLabel = document.createElement("div");
+    ticketNumberLabel.style.position = "absolute";
+    ticketNumberLabel.style.top = "5px";
+    ticketNumberLabel.style.right = "10px";
+    ticketNumberLabel.style.fontSize = "12px";
+    ticketNumberLabel.style.fontWeight = "bold";
+    ticketNumberLabel.innerText = `#${ticketNumber}`;
+    ticketContainer.appendChild(ticketNumberLabel);
 }
 
 // Генерация числа с анимацией
@@ -86,9 +94,9 @@ async function generateNumber() {
     randomAnimationInterval = setInterval(() => {
         const random = Math.floor(Math.random() * 90) + 1;
         animatedNumber.innerText = random;
-    }, 100);
+    }, 50); // Быстрая смена чисел
 
-    await new Promise(resolve => setTimeout(resolve, animationDuration)); // Ждём завершения анимации
+    await new Promise(resolve => setTimeout(resolve, animationDuration)); // Ждём завершения анимации (1 секунда)
 
     clearInterval(randomAnimationInterval);
 
