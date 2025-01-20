@@ -11,6 +11,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            overflow: hidden;
         }
 
         .welcome-text {
@@ -109,7 +110,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr); /* 10 столбцов */
-            gap: 5px;
+            gap: 3px;
             margin: 10px 0;
             width: 100%;
         }
@@ -120,7 +121,7 @@
             background-color: #cce7ff;
             border: 1px solid #ffffff;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
             display: flex;
             align-items: center;
