@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровая страница</title>
+
+    <script type="module" src="assets/js/balanceManager.js"></script>
+    
+    
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/bottom-menu.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+</head>
+
+
+<body>
+    <h1>Игровая страница</h1> <!-- Временный заголовок -->
+
+    <!-- Шапка" -->
+    <div class="header">
+        <div class="header-left">
+            <p>Игрок ID: <span id="player-id">Загрузка...</span></p>
+        </div>
+        <div class="header-right">
+            <p>Баланс: <span id="header-balance">Загрузка...</span> TON</p>
+        </div>
+    </div>
+
+    
+    <div class="menu">
+        <!-- Профиль -->
+        <button class="menu-button main" onclick="location.href='register.html'">
+            <img src="icons/profile.png" alt="Рег">
+        </button>
+        <!-- Настройки -->
+        <button class="menu-button">
+            <img src="icons/settings.png" alt="Настройки">
+        </button>
+        <!-- Главная -->
+        <button class="menu-button main" onclick="location.href='index.html'">
+            <img src="icons/home.png" alt="Главная">
+        </button>
+        <!-- Друзья -->
+        <button class="menu-button">
+            <img src="icons/friends.png" alt="Друзья">
+        </button>
+        <!-- Правила -->
+        <button class="menu-button">
+            <img src="icons/rules.png" alt="Правила">
+        </button>
+    </div>
+</body>
+</html>
