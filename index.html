@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitLoto</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js?v=11"></script>
+
+    <script type="module" src="assets/js/firebaseSetup.js"></script>
+    <script type="module" src="assets/js/displayUserDataHeader.js"></script>
+    
+    
+    <link rel="stylesheet" href="assets/css/global.css">
+    
+    <link rel="stylesheet" href="assets/css/index.css">
+
+
+    
+    
+</head>
+
+<body>
+    
+<!-- Шапка -->
+<div class="header">
+    <div class="header-left">
+        <p>👤: <span id="player-id">...</span></p>
+    </div>
+    <div class="header-center">
+        <p>🎟️: <span id="header-tickets">...</span></p>
+    </div>
+    <div class="header-right">
+        <p>💎: <span id="header-balance">...</span></p>
+    </div>
+</div>
+
+
+
+
+    <!-- Надпись "KitLot Джек пот" -->
+    <div class="jackpot-text">
+        KitLoto <br> Джек Пот <br> 1 000 000 $
+    </div>
+
+    
+    <!-- Кнопка "Играть" -->
+    <div class="play-container">
+        <a href="game.html" class="play-button"> 🚀 🐋 <br> Играть</a> <!-- Ссылка на страницу игры -->
+    </div>
+
+
+
+<div class="menu">
+    <!-- Профиль -->
+    <button class="menu-button" onclick="location.href='profile.html'">🧑‍</button>
+    
+    <!-- Настройки -->
+    <button class="menu-button">⚙️</button>
+    
+    <!-- Главная -->
+    <button class="menu-button main">🏠</button>
+    
+    <!-- Друзья -->
+    <button class="menu-button">👫</button>
+    
+    <!-- Правила -->
+    <button class="menu-button">📜</button>
+</div>
+
+
+</body>
+</html>
