@@ -1,0 +1,117 @@
+/* === Основные стили === */
+html, body {
+    font-family: Arial, sans-serif;    
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Убираем прокрутку */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('/assets/images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+/* ------------------------------- Стили для шапки ------------------------------------------- */
+.header {
+    position: fixed; /* Закрепляем шапку наверху */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Полная ширина окна */
+    height: 10vh; /* Высота шапки: 10% от высоты окна */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 51, 102, 0.8);  /* Темно-синий */
+    color: white;
+    padding: 0 5vw; /* Горизонтальные отступы: 5% от ширины окна */
+    font-size: 2.5vh; /* Размер текста зависит от высоты окна */
+    font-weight: bold;
+    box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.1); /* Тени адаптируются к высоте */
+    z-index: 1000; /* Шапка всегда сверху */
+    box-sizing: border-box; /* Padding включён в расчёт размеров */
+    border-bottom-left-radius: 10%;  /* Закругление левого нижнего угла */
+    border-bottom-right-radius: 10%; /* Закругление правого нижнего угла */
+    backdrop-filter: blur(10px); /* Размытие заднего фона (добавляет эффект стекла) */
+}
+
+/* Левый и правый блоки внутри шапки */
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw; /* Пространство между элементами в блоке */
+}
+
+/* Текст внутри блоков */
+.header-left p,
+.header-center p,
+.header-right p {
+    margin: 0;
+    line-height: 1.2; /* Высота строки для аккуратного текста */
+}
+
+/* Контейнеры равной ширины */
+.header-left,
+.header-center,
+.header-right {
+    flex: 1; /* Равное распределение пространства */
+    text-align: center;
+}
+
+
+/* ----------------------------------------------------------------------------------------------- */
+/* Меню */
+
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3vw; /* Расстояние между кнопками зависит от ширины экрана */
+    position: fixed;
+    bottom: 3vh; /* Меню будет всегда находиться на 5% от высоты экрана */
+    width: 100%;
+}
+
+/* Общие стили для кнопок */
+.menu-button {
+    width: 15vw; /* Размер кнопки зависит от ширины окна */
+    height: 15vw;
+    font-size: 7vw
+    background-color: rgba(0, 51, 102, 0.8);  /* Темно-синий */
+    border: none;
+    border-radius: 50%; /* Круглая форма */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #007acc;
+    transform: scale(1.1); /* Увеличение при наведении */
+}
+
+.menu-button img {
+    width: 50%; /* Размер картинки зависит от размера кнопки */
+    height: 50%;
+}
+
+/* Центральная кнопка ("Главная") */
+.menu-button.main {
+    width: 18vw; /* Центральная кнопка больше, чем другие */
+    height: 18vw;
+    background-color: #003366; /* Более тёмный оттенок */
+}
+
+.menu-button.main img {
+    width: 60%; /* Увеличенный размер иконки для центральной кнопки */
+    height: 60%;
+}
